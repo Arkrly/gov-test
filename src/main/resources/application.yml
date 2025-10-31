@@ -1,0 +1,101 @@
+spring:
+  application:
+    name: our-voice-our-rights
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/ourvoiceourrights?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+  cache:
+    type: ${CACHE_PROVIDER:caffeine}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  mvc:
+    problemdetails:
+      enabled: true
+
+app:
+  data-gov-base-url: https://api.data.gov.in/resource
+  data-gov-resource-id: c8ef53ea-d686-4f02-84a1-f4584790bba6
+  ingestion-schedule-cron: ${INGEST_SCHEDULE_CRON:0 0 */6 * * *}
+  ingest-limit: ${INGEST_LIMIT:100}
+  ingestion:
+    default-states:
+      - ANDHRA PRADESH
+      - KARNATAKA
+      - ODISHA
+    rolling-financial-years: 3
+    max-fetch-limit: 500
+    pagination-step: 100
+    max-retry-attempts: ${INGEST_MAX_RETRIES:5}
+    retry-initial-interval-ms: 200
+    retry-multiplier: 2.0
+  cache:
+    provider-env: ${CACHE_PROVIDER:caffeine}
+    states-ttl: PT12H
+    districts-ttl: PT6H
+    latest-performance-ttl: PT30M
+    history-ttl: PT10M
+  geo:
+    geo-ip-database-path: ${GEOIP2_DB_PATH:}
+    reverse-geocode-base-url: ${REVERSE_GEOCODE_BASE:}
+    reverse-geocode-timeout: PT3S
+    geo-ip-cache-ttl: PT6H
+  rate-limit:
+    requests-per-minute: ${RATE_LIMIT_RPM:120}
+
+resilience4j:
+  retry:
+    instances:
+      datagov:
+        max-attempts: ${INGEST_MAX_RETRIES:5}
+        wait-duration: 200ms
+        exponential-backoff-multiplier: 2
+        enable-exponential-backoff: true
+  circuitbreaker:
+    instances:
+      datagov:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        permitted-number-of-calls-in-half-open-state: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 60s
+        slow-call-duration-threshold: 5s
+        slow-call-rate-threshold: 50
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: our-voice-our-rights
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    com.ourvoiceourrights: INFO
+    org.springframework.web: INFO

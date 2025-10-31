@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ourvoice-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ourvoiceourrights
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  redis:
+    image: redis:7
+    container_name: ourvoice-redis
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  backend:
+    build: .
+    container_name: ourvoice-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ourvoiceourrights?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      CACHE_PROVIDER: ${CACHE_PROVIDER:-caffeine}
+      DATA_GOV_API_KEY: ${DATA_GOV_API_KEY}
+      GEOIP2_DB_PATH: /app/geoip/GeoLite2-City.mmdb
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./openapi:/app/openapi
+      - ./scripts:/app/scripts
+      - geoip_data:/app/geoip
+
+volumes:
+  mysql_data:
+  redis_data:
+  geoip_data:

@@ -1,0 +1,47 @@
+{
+  "info": {
+    "name": "Our Voice Our Rights API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List States",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/states",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "states"]
+        }
+      }
+    },
+    {
+      "name": "List Districts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/districts?state=ANDHRA%20PRADESH",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "districts"],
+          "query": [
+            {"key": "state", "value": "ANDHRA PRADESH"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Latest Performance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/performance/ANANTAPUR",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "performance", "ANANTAPUR"]
+        }
+      }
+    }
+  ]
+}
