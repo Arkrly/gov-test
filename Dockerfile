@@ -1,15 +1,18 @@
-# syntax=docker/dockerfile:1.4
-
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /workspace
-COPY pom.xml .
-COPY src ./src
-RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package -DskipTests
-
-FROM eclipse-temurin:21-jre
+# Build stage ensures reproducible Maven build
+FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
-COPY --from=build /workspace/target/backend-0.0.1-SNAPSHOT.jar app.jar
-COPY render/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY .mvn/ .mvn/
+COPY mvnw mvnw
+COPY mvnw.cmd mvnw.cmd
+COPY pom.xml pom.xml
+COPY src src
+RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
+RUN ./mvnw -B clean package -DskipTests
+
+# Runtime image
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=builder /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENV JAVA_OPTS=""
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

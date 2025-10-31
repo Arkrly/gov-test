@@ -1,0 +1,7 @@
+com\example\backend\controller\ResourceController.class
+com\example\backend\controller\GlobalExceptionHandler.class
+com\example\backend\model\ResourceResponse.class
+com\example\backend\model\ResourceResponse$ResourceRecord.class
+com\example\backend\BackendApplication.class
+com\example\backend\model\ResourceResponse$ResourceQuery.class
+com\example\backend\config\DataGovProperties.class

@@ -1,47 +1,9 @@
-databases:
-  - name: ourvoice-mysql
-    plan: starter
-    databaseName: ourvoiceourrights
-
 services:
   - type: web
-    name: ourvoice-backend
+    name: our-voice-backend
     runtime: docker
-    plan: starter
-    branch: main
-    dockerfilePath: Dockerfile
-    healthCheckPath: /actuator/health
+    plan: free
     autoDeploy: true
     envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: render
       - key: DATA_GOV_API_KEY
-        sync: false
-      - key: CACHE_PROVIDER
-        value: caffeine
-      - key: GEOIP2_DB_PATH
-        value: /app/geoip/GeoLite2-City.mmdb
-      - key: RENDER_MYSQL_CONNECTION_STRING
-        fromDatabase:
-          name: ourvoice-mysql
-          property: connectionString
-      - key: MYSQL_HOST
-        fromDatabase:
-          name: ourvoice-mysql
-          property: host
-      - key: MYSQL_PORT
-        fromDatabase:
-          name: ourvoice-mysql
-          property: port
-      - key: MYSQL_USER
-        fromDatabase:
-          name: ourvoice-mysql
-          property: user
-      - key: MYSQL_PASSWORD
-        fromDatabase:
-          name: ourvoice-mysql
-          property: password
-      - key: MYSQL_DATABASE
-        fromDatabase:
-          name: ourvoice-mysql
-          property: database
+        value: 579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b
