@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gov Test - Simple Frontend</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Gov Test - Simple Frontend</h1>
+
+    <form id="fetchForm">
+      <label>Resource ID
+        <input id="resourceId" type="text" value="ee03643a-ee4c-48c2-ac30-9f2ff26ab722" />
+      </label>
+
+      <label>API Key
+        <input id="apiKey" type="text" placeholder="Paste API key (see docker-compose or application.yml)" />
+      </label>
+
+      <label>Format
+        <select id="format">
+          <option value="json" selected>json</option>
+          <option value="xml">xml</option>
+          <option value="csv">csv</option>
+        </select>
+      </label>
+
+      <label>Offset
+        <input id="offset" type="number" min="0" />
+      </label>
+
+      <label>Limit
+        <input id="limit" type="number" min="1" />
+      </label>
+
+      <label>State Name (filter)
+        <input id="stateName" type="text" />
+      </label>
+
+      <label>Financial Year (filter)
+        <input id="finYear" type="text" placeholder="e.g. 2023-2024" />
+      </label>
+
+      <div class="actions">
+        <button id="fetchBtn" type="submit">Fetch</button>
+        <button id="clearBtn" type="button">Clear</button>
+      </div>
+    </form>
+
+    <section>
+      <h2>Result</h2>
+      <pre id="result">No request yet.</pre>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

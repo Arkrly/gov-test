@@ -1,5 +1,5 @@
-D:\Projects\gov_test\backend\src\main\java\com\example\backend\BackendApplication.java
-D:\Projects\gov_test\backend\src\main\java\com\example\backend\config\DataGovProperties.java
-D:\Projects\gov_test\backend\src\main\java\com\example\backend\controller\GlobalExceptionHandler.java
-D:\Projects\gov_test\backend\src\main\java\com\example\backend\controller\ResourceController.java
-D:\Projects\gov_test\backend\src\main\java\com\example\backend\model\ResourceResponse.java
+D:\Projects\gov-test\src\main\java\com\example\backend\BackendApplication.java
+D:\Projects\gov-test\src\main\java\com\example\backend\config\DataGovProperties.java
+D:\Projects\gov-test\src\main\java\com\example\backend\controller\GlobalExceptionHandler.java
+D:\Projects\gov-test\src\main\java\com\example\backend\controller\ResourceController.java
+D:\Projects\gov-test\src\main\java\com\example\backend\model\ResourceResponse.java
